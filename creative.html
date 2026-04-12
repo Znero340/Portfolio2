@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nero Creative – John Michael Santos</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ── Creative Page Specific Styles ─────────────────────── */
+        body.creative-page {
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg);
+            transition: background 0.5s ease;
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            cursor: grab;
+        }
+
+        body.creative-page:active {
+            cursor: grabbing;
+        }
+
+        .creative-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* ── Central Branding ──────────────────────────────────── */
+        .branding {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            pointer-events: none;
+            transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .branding-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .branding-logo {
+            display: none;
+            margin-right: 15px;
+        }
+
+        .nero-icon {
+            width: 32px;
+            height: 32px;
+            transition: filter 0.3s ease;
+        }
+
+        [data-theme="light"] .nero-icon {
+            filter: invert(1);
+        }
+
+        [data-theme="dark"] .nero-icon {
+            filter: invert(0);
+        }
+
+        .branding h1 {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            font-size: clamp(3rem, 10vw, 8.5rem);
+            font-weight: 500;
+            line-height: 0.88;
+            margin: 0;
+            color: var(--text-1);
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .title-line-1 {
+            display: block;
+        }
+
+        .title-line-2 {
+            display: block;
+            margin-left: 1.25em;
+        }
+
+        .branding p {
+            align-self: center;
+            font-size: 2rem;
+            color: var(--text-1);
+            font-weight: 400;
+            margin-top: 15px;
+            margin-left: 0;
+            letter-spacing: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* ── Work Items Group ──────────────────────────────────── */
+        .items-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 2;
+            /* Drops behind text */
+            pointer-events: none;
+            transform-style: preserve-3d;
+            perspective: 1500px;
+        }
+
+        .work-item {
+            position: absolute;
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: width 1s cubic-bezier(0.25, 1, 0.5, 1),
+                height 1s cubic-bezier(0.25, 1, 0.5, 1),
+                border-radius 1s cubic-bezier(0.25, 1, 0.5, 1),
+                background 0.5s ease;
+        }
+
+        [data-theme="dark"] .work-item {
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .work-item img,
+        .work-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 8px 25px rgba(0, 0, 0, 0.15));
+            opacity: 1;
+            transition: opacity 0.8s ease;
+            pointer-events: none;
+        }
+
+        .work-item video {
+            object-fit: cover;
+            aspect-ratio: 1/1;
+            border-radius: 8px;
+        }
+
+        /* ── Controls ─────────────────────────────────────────── */
+        .back-home {
+            position: fixed;
+            top: 40px;
+            left: 40px;
+            z-index: 100;
+            text-decoration: none;
+            color: var(--text-1);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.2s;
+            pointer-events: auto;
+        }
+
+        .back-home:hover {
+            opacity: 0.7;
+        }
+
+        .theme-switch {
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            z-index: 100;
+            pointer-events: auto;
+        }
+
+        /* ── Category Filters (Lower Left) ─────────────────────── */
+        .category-controls {
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            display: grid;
+            grid-template-columns: repeat(3, max-content);
+            justify-content: start;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .cat-btn {
+            background: rgba(var(--surface-rgb), 0.5);
+            color: var(--text-1);
+            border: 1px solid rgba(150, 150, 150, 0.2);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            pointer-events: auto;
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .cat-btn:hover,
+        .cat-btn.active {
+            background: rgba(var(--surface-rgb), 0.8);
+            transform: translateY(-5px);
+            border-color: rgba(150, 150, 150, 0.4);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Active highlight for better visual hierarchy */
+        .cat-btn.active {
+            border-color: var(--text-1);
+            box-shadow: 0 0 0 1px var(--text-1), 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ── Grid View Overlay ─────────────────────────────────── */
+        .grid-view-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg);
+            z-index: 9000;
+            /* Behind lightbox (10000) */
+            padding: 80px 80px 100px 80px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .grid-view-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        [data-theme="light"] .grid-view-overlay {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(25px);
+        }
+
+        [data-theme="dark"] .grid-view-overlay {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(25px);
+        }
+
+        .grid-view-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+            border-bottom: 1px solid rgba(150, 150, 150, 0.2);
+            padding-bottom: 25px;
+        }
+
+        .grid-view-header h2 {
+            font-size: 3.5rem;
+            color: var(--text-1);
+            margin: 0;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .close-grid {
+            background: none;
+            border: none;
+            color: var(--text-1);
+            font-size: 3rem;
+            line-height: 1;
+            cursor: pointer;
+            font-weight: 200;
+            transition: transform 0.4s ease;
+            padding: 0;
+            margin: 0;
+        }
+
+        .close-grid:hover {
+            transform: rotate(90deg);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 40px;
+            padding-bottom: 80px;
+        }
+
+        .grid-item {
+            position: relative;
+            aspect-ratio: 1/1;
+            /* Enforce 1:1 Strict Ratio */
+            background: rgba(150, 150, 150, 0.08);
+            border-radius: 16px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(60px) scale(0.95);
+            transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+            border: 1px solid rgba(150, 150, 150, 0.1);
+        }
+
+        .grid-item.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .grid-item:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .grid-item.show:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(150, 150, 150, 0.3);
+        }
+
+        /* Abstract Shape Placeholder Graphics */
+        .shape-placeholder {
+            width: 45%;
+            height: 45%;
+            background: var(--text-1);
+            opacity: 0.1;
+            transition: opacity 0.4s ease, transform 0.6s ease;
+        }
+
+        .grid-item:hover .shape-placeholder {
+            opacity: 0.25;
+            transform: scale(1.15) rotate(15deg);
+        }
+
+        .shape-circle {
+            border-radius: 50%;
+        }
+
+        .shape-square {
+            border-radius: 8px;
+        }
+
+        .shape-triangle {
+            background: transparent;
+            width: 0;
+            height: 0;
+            border-left: 60px solid transparent;
+            border-right: 60px solid transparent;
+            border-bottom: 100px solid var(--text-1);
+            opacity: 0.1;
+        }
+
+        /* ── Fade In Overlay ───────────────────────────────────── */
+        .fade-in-white {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            z-index: 15000;
+            pointer-events: none;
+            animation: fadeOutWhite 1.5s forwards ease-in-out;
+        }
+
+        @keyframes fadeOutWhite {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* ── Grid Moving Background Effect ─────────────────────── */
+        .bg-grid-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            -webkit-mask-image: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 0) 65%);
+            mask-image: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 0) 65%);
+            opacity: 0.8;
+            transition: opacity 0.5s ease;
+        }
+
+        .bg-grid {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background-size: 60px 60px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+            animation: gridPan 3s linear infinite;
+        }
+
+        [data-theme="dark"] .bg-grid {
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
+
+        @keyframes gridPan {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(60px, 60px);
+            }
+        }
+
+        /* ── Lightbox Overlay ──────────────────────────────────── */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 25px;
+            right: 40px;
+            color: #fff;
+            font-size: 3rem;
+            cursor: pointer;
+            z-index: 10001;
+            font-weight: 200;
+        }
+
+        .lightbox-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+
+        .lightbox-content img,
+        .lightbox-content video {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox-carousel {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10002;
+            padding: 8px 14px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            /* For hit area */
+            border: none;
+            padding: 0;
+            display: block;
+            pointer-events: auto;
+        }
+
+        .carousel-dot::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+        }
+
+        .carousel-dot.active {
+            background: rgba(255, 255, 255, 1);
+            transform: scale(1.2);
+        }
+
+        .lightbox-carousel img {
+            cursor: pointer;
+            /* Suggests clicking image to cycle backward/forward */
+        }
+
+        .carousel-preview-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 10003;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-preview-btn:hover {
+            background: rgba(0, 0, 0, 0.7);
+            transform: scale(1.05);
+        }
+
+        .live-preview-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.92);
+            z-index: 20000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+        }
+
+        .live-preview-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .live-preview-close {
+            position: absolute;
+            top: 25px;
+            right: 40px;
+            color: #fff;
+            font-size: 4rem;
+            cursor: pointer;
+            z-index: 20002;
+            font-weight: 200;
+            border: none;
+            background: transparent;
+            transition: transform 0.4s ease;
+            padding: 0;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .live-preview-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .live-preview-nav {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 40vw;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 20001;
+            transition: background 0.3s ease;
+        }
+
+        .live-preview-nav:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .live-preview-nav.prev {
+            left: 0;
+        }
+
+        .live-preview-nav.next {
+            right: 0;
+        }
+
+        .live-preview-content {
+            width: 100vw;
+            height: 100vh;
+            background: transparent;
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+        }
+
+        .live-preview-content img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            max-width: 1600px;
+            display: block;
+        }
+
+        .live-preview-dots-wrapper {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 20005;
+            padding: 8px 14px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .live-preview-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border: none;
+            padding: 0;
+            display: block;
+            pointer-events: auto;
+        }
+
+        .live-preview-dot::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+        }
+
+        .live-preview-dot.active {
+            background: rgba(255, 255, 255, 1);
+            transform: scale(1.2);
+        }
+
+        .social-controls {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .social-icon-btn {
+            background: rgba(var(--surface-rgb), 0.5);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border: 1px solid rgba(150, 150, 150, 0.2);
+            color: var(--text-1);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            text-decoration: none;
+        }
+
+        .social-icon-btn:hover {
+            transform: translateY(-5px) scale(1.1);
+            background: rgba(var(--surface-rgb), 0.8);
+            border-color: rgba(150, 150, 150, 0.4);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-icon-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 2;
+        }
+
+        @media (max-width: 768px) {
+            .social-controls {
+                bottom: 20px;
+                right: 20px;
+                gap: 10px;
+            }
+
+            .social-icon-btn {
+                width: 44px;
+                height: 44px;
+            }
+        }
+    </style>
+</head>
+
+<body class="creative-page" data-theme="light">
+
+    <div class="fade-in-white"></div>
+
+    <!-- Grid Background Effect -->
+    <div class="bg-grid-wrapper">
+        <div class="bg-grid"></div>
+    </div>
+
+    <!-- Category Grid View Overlay -->
+    <div class="grid-view-overlay" id="grid-view-overlay">
+        <div class="grid-view-header">
+            <h2 id="grid-category-title">Category Name</h2>
+            <button class="close-grid" onclick="closeGridView()">&times;</button>
+        </div>
+        <div class="grid-container" id="grid-container">
+            <!-- Placeholders populated via JS Waterfall -->
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+        <div class="lightbox-close" onclick="closeLightbox(event)">&times;</div>
+        <div class="lightbox-content" id="lightbox-content"></div>
+    </div>
+
+    <!-- Live Website Preview Overlay -->
+    <div id="live-preview-overlay" class="live-preview-overlay">
+        <button class="live-preview-close" onclick="closeLivePreview()">&times;</button>
+        <button class="live-preview-nav prev" onclick="prevLivePreview(event)"></button>
+        <button class="live-preview-nav next" onclick="nextLivePreview(event)"></button>
+        <div class="live-preview-content">
+            <div id="lp-inject" style="width: 100%; display: flex; flex-direction: column; align-items:center;">
+                <!-- Fullscreen Image renders here natively flowing -->
+            </div>
+        </div>
+        <div class="live-preview-dots-wrapper" id="lp-dots-wrapper"></div>
+    </div>
+
+    <!-- UI Elements -->
+    <a href="index.html" class="back-home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15 18 9 12 15 6" />
+        </svg>
+        Back
+    </a>
+
+    <button class="btn btn-icon theme-switch" onclick="toggleThemeLocal()">
+        <svg id="creative-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.2">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+        </svg>
+        <svg id="creative-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.2" style="display:none">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+        </svg>
+    </button>
+
+    <!-- Category Sidebar -->
+    <div class="category-controls">
+        <button class="cat-btn" onclick="openCategory('UI/UX Designs', event)">UI/UX Designs</button>
+        <button class="cat-btn" onclick="openCategory('Graphic Designs', event)">Graphic Designs</button>
+        <button class="cat-btn" onclick="openCategory('Animations', event)">Animations</button>
+        <button class="cat-btn" onclick="openCategory('Motion Graphics', event)">Motion Graphics</button>
+        <button class="cat-btn" onclick="openCategory('Logo Animation', event)">Logo Animation</button>
+    </div>
+
+    <!-- Social Controls -->
+    <div class="social-controls">
+        <a href="https://www.instagram.com/nero.creatives/?hl=en" class="social-icon-btn" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+        </a>
+        <a href="https://www.tiktok.com/@zneeeroo?is_from_webapp=1&sender_device=pc" class="social-icon-btn"
+            aria-label="TikTok" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
+            </svg>
+        </a>
+        <a href="https://www.youtube.com/@zneroedits" class="social-icon-btn" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                    d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.14 1 12 1 12s0 3.86.46 5.58a2.78 2.78 0 0 0 1.94 2c1.72.42 8.6.42 8.6.42s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.86 23 12 23 12s0-3.86-.46-5.58z">
+                </path>
+                <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"></polygon>
+            </svg>
+        </a>
+    </div>
+
+    <div class="creative-container" id="creative-container">
+
+        <!-- Background Items -->
+        <div class="items-wrapper" id="items-wrapper"></div>
+
+        <!-- Typography Interleaves -->
+        <div class="branding" id="branding">
+            <div class="branding-logo">
+                <img src="Nero Logo.svg" alt="Nero Logo" class="nero-icon">
+            </div>
+            <div class="branding-text">
+                <h1 id="brand-title">
+                    <span class="title-line-1">NERO</span>
+                    <span class="title-line-2">CREATIVE</span>
+                </h1>
+                <p id="brand-subtitle">Creativity without limits</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const container = document.getElementById('creative-container');
+        const wrapper = document.getElementById('items-wrapper');
+
+        // Exact Box Layout mapped from user's image 1
+        const style1Pattern = [
+            { w: 14, h: 18, x: -42, y: -50 },
+            { w: 22, h: 26, x: -38, y: 35 },
+            { w: 18, h: 20, x: -12, y: 5 },
+            { w: 10, h: 8, x: -12, y: -20 },
+            { w: 9, h: 6, x: 8, y: -15 },
+            { w: 22, h: 14, x: 28, y: -30 },
+            { w: 20, h: 24, x: 32, y: 12 },
+            { w: 16, h: 12, x: 15, y: 35 },
+        ];
+
+        // Centralized media dictionary mapping types to files
+        const mediaSources = [
+            { type: 'video', src: "Hero.mp4" },
+            { type: 'img', src: "Activity 1.jpg" },
+            { type: 'video', src: "Intro.mp4#t=53" },
+            { type: 'img', src: "IDEA 1 Rainy Season Posting.png" },
+            { type: 'video', src: "Logo Animation With Glare Full Screen (1).mp4" },
+            { type: 'img', src: "Valentines Poster Yummy Tokyo.png" },
+            { type: 'video', src: "Maki Manga Animation Na Maangas (1).mp4" },
+            { type: 'img', src: "Typo.png" },
+            { type: 'video', src: "Wag kang matakot (1).mp4" },
+            { type: 'img', src: "Ratings.png" },
+            { type: 'video', src: "finall (1).mp4" },
+            { type: 'video', src: "museoo3 (1).mp4" },
+            { type: 'img', src: "Gyoza.png" },
+            { type: 'video', src: "Maloi.mp4" }
+        ];
+
+        const itemCount = 16;
+        const items = [];
+
+        // ── Item Generation ─────────────────────────────────────
+        function initItems() {
+            for (let i = 0; i < itemCount; i++) {
+                const item = document.createElement('div');
+                item.className = 'work-item';
+
+                const media = mediaSources[i % mediaSources.length];
+                let contentEl;
+                if (media.type === 'video') {
+                    contentEl = document.createElement('video');
+                    contentEl.src = media.src;
+                    contentEl.autoplay = true;
+                    contentEl.muted = true;
+                    contentEl.loop = true;
+                    contentEl.playsInline = true;
+                } else {
+                    contentEl = document.createElement('img');
+                    contentEl.src = media.src;
+                }
+
+                item.appendChild(contentEl);
+
+                const patternIdx = i % style1Pattern.length;
+                const tileOffset = Math.floor(i / style1Pattern.length) * 100;
+                const baseS1 = style1Pattern[patternIdx];
+
+                let boxW = baseS1.w;
+                let boxH = baseS1.h;
+                if (media.type === 'video') {
+                    const size = Math.max(boxW, boxH);
+                    boxW = size;
+                    boxH = size;
+                }
+
+                wrapper.appendChild(item);
+
+                item.addEventListener('click', (e) => {
+                    if (window.isDraggingItems) {
+                        e.preventDefault();
+                        return;
+                    }
+                    openLightbox(media);
+                });
+
+                items.push({
+                    el: item,
+                    s1: { x: baseS1.x + tileOffset, y: baseS1.y, w: boxW, h: boxH }
+                });
+            }
+        }
+
+        // ── Main Loop for Auto & Drag ────────────────────────────
+        let scrollOffset = 0;
+        let targetScrollOffset = 0;
+        let isDragging = false;
+        let startX = 0;
+        const totalSpanVWStyle1 = 200;
+        window.isDraggingItems = false;
+
+        const categoryMedia = {
+            'UI/UX Designs': [
+                {
+                    type: 'carousel',
+                    cover: 'Frame 1.png',
+                    images: ['Frame 1.png', 'Frame 2.png', 'Frame 3.png'],
+                    previewFrames: [
+                        'Landing Page.png', 'Room & Suites.png', 'Preview.png', 'Book.png',
+                        'Payment.png', 'Payment Confirmed.png', 'Gallery.png', 'About Us.png', 'Contact Us.png'
+                    ]
+                },
+                {
+                    type: 'carousel',
+                    cover: 'Design 2 Frame 1.png',
+                    images: ['Design 2 Frame 1.png', 'Design 2 Frame 2.png', 'Design 2 Frame 3.png'],
+                    previewFrames: [
+                        { type: 'collage', images: ['Design 2/Sign In Modal.png', 'Design 2/Sign Up Modal.png', 'Design 2/Find Store.png', 'Design 2/Track Order Modal.png'] },
+                        'Design 2/Landing Page.png', 'Design 2/Shop.png', 'Design 2/Product 1 Preview.png',
+                        'Design 2/About Us.png', 'Design 2/Track Order.png', 'Design 2/Cart.png',
+                        'Design 2/Help Center.png', 'Design 2/Account.png'
+                    ]
+                }
+            ],
+            'Graphic Designs': [
+                { type: 'img', src: 'Gyoza.png' },
+                { type: 'img', src: 'Valentines Poster Yummy Tokyo.png' },
+                { type: 'img', src: 'Typo.png' },
+                { type: 'img', src: 'Ratings.png' },
+                { type: 'img', src: 'IDEA 1 Rainy Season Posting.png' }
+            ],
+            'Animations': [
+                { type: 'video', src: 'Maki Manga Animation Na Maangas (1).mp4' },
+                { type: 'video', src: 'Hero.mp4' },
+                { type: 'video', src: 'museoo3 (1).mp4' },
+                { type: 'video', src: 'Maloi.mp4' }
+            ],
+            'Motion Graphics': [
+                { type: 'video', src: 'Wag kang matakot (1).mp4' },
+                { type: 'video', src: 'Intro.mp4' }
+            ],
+            'Logo Animation': [
+                { type: 'video', src: 'finall (1).mp4' },
+                { type: 'video', src: 'Logo Animation With Glare Full Screen (1).mp4' }
+            ]
+        };
+
+        function animate() {
+            if (!isDragging) targetScrollOffset -= 0.04;
+            scrollOffset += (targetScrollOffset - scrollOffset) * 0.1;
+
+            items.forEach((item) => {
+                let wrappedX = ((item.s1.x + scrollOffset) % totalSpanVWStyle1);
+                if (wrappedX < -100) wrappedX += totalSpanVWStyle1;
+                if (wrappedX > 100) wrappedX -= totalSpanVWStyle1;
+
+                item.el.style.width = `${item.s1.w}vw`;
+                item.el.style.height = `${item.s1.h}vw`;
+                item.el.style.left = `calc(50% + ${wrappedX}vw)`;
+                item.el.style.top = `calc(50% + ${item.s1.y}vh)`;
+                item.el.style.transform = `translate(-50%, -50%)`;
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        // ── Category Grid Overlay System ────────────────────────
+        function openCategory(categoryName, event) {
+            if (event) {
+                document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+                event.target.classList.add('active');
+            }
+
+            const overlay = document.getElementById('grid-view-overlay');
+            const grid = document.getElementById('grid-container');
+            const title = document.getElementById('grid-category-title');
+
+            title.textContent = categoryName;
+            grid.innerHTML = '';
+            overlay.classList.add('active');
+
+            const mediaItems = categoryMedia[categoryName] || [];
+
+            mediaItems.forEach((media, i) => {
+                const item = document.createElement('div');
+                item.className = 'grid-item';
+
+                let contentEl;
+                if (media.type === 'video') {
+                    contentEl = document.createElement('video');
+                    contentEl.src = media.src;
+                    contentEl.autoplay = true;
+                    contentEl.muted = true;
+                    contentEl.loop = true;
+                    contentEl.playsInline = true;
+                    contentEl.style.width = '100%';
+                    contentEl.style.height = '100%';
+                    contentEl.style.objectFit = 'cover';
+                    contentEl.style.borderRadius = '16px';
+                    contentEl.style.display = 'block';
+                } else if (media.type === 'carousel') {
+                    contentEl = document.createElement('img');
+                    contentEl.src = media.cover;
+                    contentEl.style.width = '100%';
+                    contentEl.style.height = '100%';
+                    contentEl.style.objectFit = 'cover';
+                    contentEl.style.borderRadius = '16px';
+                    contentEl.style.display = 'block';
+                } else {
+                    contentEl = document.createElement('img');
+                    contentEl.src = media.src;
+                    contentEl.style.width = '100%';
+                    contentEl.style.height = '100%';
+                    contentEl.style.objectFit = 'cover';
+                    contentEl.style.borderRadius = '16px';
+                    contentEl.style.display = 'block';
+                }
+
+                item.appendChild(contentEl);
+
+                item.addEventListener('click', () => {
+                    openLightbox(media);
+                });
+
+                grid.appendChild(item);
+
+                setTimeout(() => {
+                    item.classList.add('show');
+                }, 100 + (i * 75));
+            });
+        }
+
+        function closeGridView() {
+            const overlay = document.getElementById('grid-view-overlay');
+            overlay.classList.remove('active');
+
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+
+            // Safely rip out the inner HTML *after* the CSS hide transition terminates
+            setTimeout(() => {
+                document.getElementById('grid-container').innerHTML = '';
+            }, 600);
+        }
+
+        // ── Lightbox Rendering System ───────────────────────────
+        function openLightbox(media) {
+            const lb = document.getElementById('lightbox');
+            const content = document.getElementById('lightbox-content');
+            content.innerHTML = '';
+
+            if (media.type === 'video') {
+                const vid = document.createElement('video');
+                vid.src = media.src; vid.controls = true; vid.autoplay = true; vid.loop = true;
+                content.appendChild(vid);
+            } else if (media.type === 'carousel') {
+                const carouselWrapper = document.createElement('div');
+                carouselWrapper.className = 'lightbox-carousel';
+                let activeIndex = 0;
+
+                const imgDisplay = document.createElement('img');
+                imgDisplay.src = media.images[activeIndex];
+                carouselWrapper.appendChild(imgDisplay);
+
+                const previewBtn = document.createElement('button');
+                previewBtn.className = 'carousel-preview-btn';
+                previewBtn.innerHTML = 'Preview';
+                previewBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    openLivePreview(media.previewFrames || []);
+                };
+                carouselWrapper.appendChild(previewBtn);
+
+                if (media.images.length > 1) {
+                    const dotsContainer = document.createElement('div');
+                    dotsContainer.className = 'carousel-dots';
+
+                    const dots = [];
+                    media.images.forEach((_, idx) => {
+                        const dot = document.createElement('button');
+                        dot.type = 'button';
+                        dot.className = 'carousel-dot' + (idx === 0 ? ' active' : '');
+                        dot.addEventListener('click', (e) => {
+                            e.stopPropagation(); e.preventDefault();
+                            activeIndex = idx;
+                            imgDisplay.src = media.images[activeIndex];
+                            dots.forEach(d => d.classList.remove('active'));
+                            dot.classList.add('active');
+                        });
+                        dotsContainer.appendChild(dot);
+                        dots.push(dot);
+                    });
+
+                    carouselWrapper.appendChild(dotsContainer);
+
+                    // Allows tapping the image to organically go to the next one
+                    imgDisplay.onclick = (e) => {
+                        e.stopPropagation();
+                        activeIndex = (activeIndex + 1) % media.images.length;
+                        imgDisplay.src = media.images[activeIndex];
+                        dots.forEach(d => d.classList.remove('active'));
+                        dots[activeIndex].classList.add('active');
+                    };
+                }
+                content.appendChild(carouselWrapper);
+            } else {
+                const img = document.createElement('img');
+                img.src = media.src;
+                content.appendChild(img);
+            }
+            lb.classList.add('active');
+        }
+
+        function closeLightbox(e) {
+            if (e.target.id === 'lightbox' || e.target.classList.contains('lightbox-close')) {
+                const lb = document.getElementById('lightbox');
+                lb.classList.remove('active');
+                setTimeout(() => { document.getElementById('lightbox-content').innerHTML = ''; }, 300);
+            }
+        }
+
+        // ── Interaction Handlers ────────────────────────────────
+        document.body.addEventListener('mousedown', (e) => {
+            if (e.target.closest('button') || e.target.closest('a') || e.target.closest('.lightbox') || e.target.closest('.grid-view-overlay')) return;
+            isDragging = true; window.isDraggingItems = false; startX = e.pageX;
+        });
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return; e.preventDefault(); const deltaX = e.pageX - startX;
+            if (Math.abs(deltaX) > 3) window.isDraggingItems = true;
+            startX = e.pageX; targetScrollOffset += deltaX * 0.08;
+        });
+        window.addEventListener('mouseup', () => { isDragging = false; setTimeout(() => window.isDraggingItems = false, 50); });
+        window.addEventListener('mouseleave', () => { isDragging = false; });
+        document.body.addEventListener('touchstart', (e) => {
+            if (e.target.closest('button') || e.target.closest('a') || e.target.closest('.lightbox') || e.target.closest('.grid-view-overlay')) return;
+            isDragging = true; window.isDraggingItems = false; startX = e.touches[0].pageX;
+        }, { passive: true });
+        window.addEventListener('touchmove', (e) => {
+            if (!isDragging) return; const deltaX = e.touches[0].pageX - startX;
+            if (Math.abs(deltaX) > 3) window.isDraggingItems = true;
+            startX = e.touches[0].pageX; targetScrollOffset += deltaX * 0.08;
+        }, { passive: true });
+        window.addEventListener('touchend', () => { isDragging = false; setTimeout(() => window.isDraggingItems = false, 50); });
+
+        // ── Theme Management ────────────────────────────────────
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            document.body.setAttribute('data-theme', theme);
+            const sun = document.getElementById('creative-sun');
+            const moon = document.getElementById('creative-moon');
+            if (theme === 'dark') { sun.style.display = 'none'; moon.style.display = 'block'; }
+            else { sun.style.display = 'block'; moon.style.display = 'none'; }
+        }
+        function toggleThemeLocal() {
+            const current = document.documentElement.getAttribute('data-theme') || 'light';
+            const next = current === 'light' ? 'dark' : 'light';
+            applyTheme(next); localStorage.setItem('theme', next);
+        }
+
+        // ── Live Website Preview System ─────────────────────────
+        let livePreviewIndex = 0;
+        let livePreviewImages = [];
+
+        function openLivePreview(images) {
+            livePreviewImages = images || [];
+            livePreviewIndex = 0;
+            const overlay = document.getElementById('live-preview-overlay');
+
+            // Build dots
+            const dotsWrapper = document.getElementById('lp-dots-wrapper');
+            dotsWrapper.innerHTML = '';
+
+            if (livePreviewImages.length > 1) {
+                livePreviewImages.forEach((_, idx) => {
+                    const dot = document.createElement('button');
+                    dot.type = 'button';
+                    dot.className = 'live-preview-dot';
+                    dot.addEventListener('click', (e) => {
+                        e.stopPropagation(); e.preventDefault();
+                        livePreviewIndex = idx;
+                        updateLivePreview();
+                    });
+                    dotsWrapper.appendChild(dot);
+                });
+            }
+
+            overlay.classList.add('active');
+            updateLivePreview();
+        }
+
+        function updateLivePreview() {
+            if (livePreviewImages.length === 0) return;
+            const content = document.getElementById('lp-inject');
+            const data = livePreviewImages[livePreviewIndex];
+
+            if (typeof data === 'string') {
+                content.innerHTML = `<img src="${data}" alt="Website Preview Render" />`;
+            } else if (data.type === 'collage') {
+                content.innerHTML = `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; width: 100%; max-width: 1200px; padding: 40px;">
+                        ${data.images.map(src => `<img src="${src}" style="width: 100%; height: auto; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.4);" />`).join('')}
+                    </div>
+                `;
+            }
+
+            // Update dots explicitly corresponding to dynamic bounds
+            const dots = document.querySelectorAll('#lp-dots-wrapper .live-preview-dot');
+            dots.forEach((dot, idx) => {
+                if (idx === livePreviewIndex) dot.classList.add('active');
+                else dot.classList.remove('active');
+            });
+
+            // reset scroll position instantly when swapping pages
+            document.querySelector('.live-preview-content').scrollTop = 0;
+        }
+
+        function nextLivePreview(e) {
+            if (e) e.stopPropagation();
+            if (livePreviewImages.length === 0) return;
+            livePreviewIndex = (livePreviewIndex + 1) % livePreviewImages.length;
+            updateLivePreview();
+        }
+
+        function prevLivePreview(e) {
+            if (e) e.stopPropagation();
+            if (livePreviewImages.length === 0) return;
+            livePreviewIndex = (livePreviewIndex - 1 + livePreviewImages.length) % livePreviewImages.length;
+            updateLivePreview();
+        }
+
+        function closeLivePreview() {
+            document.getElementById('live-preview-overlay').classList.remove('active');
+            document.getElementById('lp-inject').innerHTML = '';
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        applyTheme(savedTheme);
+        initItems();
+        animate();
+
+    </script>
+</body>
+
+</html>
