@@ -28,7 +28,7 @@
     --card-shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .05);
     --radius: 12px;
     --radius-sm: 8px;
-    --transition: all .2s ease;
+    --transition: all .1s ease;
 }
 
 footer {
@@ -798,6 +798,12 @@ body {
     color: var(--text-2);
 }
 
+.contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
 .speaking-text {
     font-size: 0.8rem;
     color: var(--text-2);
@@ -899,7 +905,8 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: transparent; /* Changed from #000 to transparent */
+    background: transparent;
+    /* Changed from #000 to transparent */
     z-index: 9999;
     display: none;
     align-items: center;
@@ -954,8 +961,13 @@ body {
 }
 
 @keyframes fadeOutWhite {
-    0% { opacity: 1; }
-    100% { opacity: 0; }
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
 }
 
 /* ── Responsive ──────────────────────────────────────────── */
@@ -1141,7 +1153,8 @@ body {
     overflow-x: auto;
     background: var(--surface);
     border-top: 1px solid var(--border);
-    scrollbar-width: none; /* Hide scrollbar for cleaner look */
+    scrollbar-width: none;
+    /* Hide scrollbar for cleaner look */
 }
 
 .chat-suggestions::-webkit-scrollbar {
@@ -1298,5 +1311,161 @@ body {
 @media (max-width: 640px) {
     .tags-large {
         grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* ── Footer Cards Grid ──────────────────────────────────── */
+.footer-cards-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 6px;
+    grid-column: 1 / -1;
+    margin-top: 6px;
+}
+
+.footer-social-card {
+    width: 420px;
+}
+
+.social-links-grid-new {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 24px;
+    margin-top: 10px;
+}
+
+.social-item-new {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.social-icon-wrapper {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--tag-bg);
+    color: var(--text-1);
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.social-info-new {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.social-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-1);
+}
+
+.social-username {
+    font-size: 0.8rem;
+    color: var(--text-3);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.social-username:hover {
+    color: var(--accent);
+}
+
+/* Footer Contact Items */
+.footer-contact-items-new {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.contact-item-new {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.contact-label-new {
+    padding-top: 10px;
+    font-size: 0.72rem;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.contact-value-new {
+    font-size: 0.82rem;
+    color: var(--text-1);
+    text-decoration: none;
+    word-break: break-all;
+    transition: var(--transition);
+}
+
+.contact-value-new:hover {
+    color: var(--accent);
+}
+
+/* Footer Review */
+.footer-review-new {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.review-text-new {
+    padding-top: 10px;
+    font-size: 0.82rem;
+    color: var(--text-2);
+    line-height: 1.6;
+    font-style: italic;
+}
+
+.review-author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.review-author-new {
+    font-size: 0.82rem;
+    color: var(--text-1);
+    font-weight: 600;
+}
+
+.review-title-new {
+    font-size: 0.72rem;
+    color: var(--text-3);
+}
+
+@media (max-width: 1024px) {
+    .footer-cards-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+    }
+
+    .footer-cards-grid .footer-card:nth-child(3) {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+
+    .social-links-grid-new {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .social-links-grid-new {
+        grid-template-columns: 1fr;
+        gap: 16px;
     }
 }
