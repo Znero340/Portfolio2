@@ -84,21 +84,24 @@ function initializeProjectsCarousel() {
     let pointerStartX = 0;
     let pointerStartScrollLeft = 0;
     let isDragging = false;
-    let didDrag = false;
+    let suppressClick = false;
 
     projectGrid.addEventListener('pointerdown', (event) => {
-        if (event.pointerType === 'mouse' && event.button !== 0) return;
+        if (event.pointerType === 'mouse') return;
         pointerStartX = event.clientX;
         pointerStartScrollLeft = projectGrid.scrollLeft;
         isDragging = true;
-        didDrag = false;
+        suppressClick = false;
         projectGrid.classList.add('is-dragging');
         projectGrid.setPointerCapture(event.pointerId);
     });
 
     projectGrid.addEventListener('pointermove', (event) => {
         if (!isDragging) return;
-        if (Math.abs(event.clientX - pointerStartX) > 6) didDrag = true;
+        if (Math.abs(event.clientX - pointerStartX) > 6) {
+            suppressClick = true;
+            event.preventDefault();
+        }
         projectGrid.scrollLeft = pointerStartScrollLeft - (event.clientX - pointerStartX);
     });
 
@@ -114,10 +117,10 @@ function initializeProjectsCarousel() {
     projectGrid.addEventListener('pointerup', stopDragging);
     projectGrid.addEventListener('pointercancel', stopDragging);
     projectGrid.addEventListener('click', (event) => {
-        if (!didDrag) return;
+        if (!suppressClick) return;
         event.preventDefault();
         event.stopPropagation();
-        didDrag = false;
+        suppressClick = false;
     }, true);
     updateControls();
 }
