@@ -234,40 +234,67 @@
                         </a>
                     </div>
 
-                    <div class="projects-grid">
-                        <a href="https://lwsacademy.co/social-marketing-school/" class="project-card" target="_blank">
-                            <div class="project-card-header">
-                                <p class="project-name">Social Marketing School</p>
-                                <div class="project-tools">
-                                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/adobeaftereffects.svg"
-                                        class="project-tool-icon" alt="After Effects">
-                                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/figma.svg"
-                                        class="project-tool-icon" alt="Figma">
+                    <div class="projects-carousel">
+                        <button class="project-nav project-nav--previous" type="button" aria-label="Previous project">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <polyline points="15 18 9 12 15 6" />
+                            </svg>
+                        </button>
+                        <div class="projects-grid">
+                            <a href="https://www.phpickleballleague.com/home" class="project-card" target="_blank">
+                                <div class="project-card-header">
+                                    <p class="project-name">Philippine Pickleball League</p>
+                                    <div class="project-tools">
+                                        <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/adobeaftereffects.svg"
+                                            class="project-tool-icon" alt="After Effects">
+                                        <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/figma.svg"
+                                            class="project-tool-icon" alt="Figma">
+                                    </div>
                                 </div>
-                            </div>
-                            <p class="project-desc">Online platform for digital marketing education and courses.</p>
-                            <div class="project-card-footer">
-                                <span class="project-url">lwacademy.co</span>
-                                <span class="project-tagline">Only the design</span>
-                            </div>
-                        </a>
-
-                        <a href="https://lwsacademy.co/ai-platform-masterclass/" class="project-card" target="_blank">
-                            <div class="project-card-header">
-                                <p class="project-name">AI Platform MasterClass</p>
-                                <div class="project-tools">
-                                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/adobeaftereffects.svg"
-                                        class="project-tool-icon" alt="After Effects">
-                                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/figma.svg"
-                                        class="project-tool-icon" alt="Figma">
+                                <p class="project-desc">Biggest Pickleball Tournament in the Philippines.</p>
+                                <div class="project-card-footer">
+                                    <span class="project-url">phpickleballleague.com</span>
                                 </div>
-                            </div>
-                            <p class="project-desc">AI-powered learning platform for professionals.</p>
-                            <div class="project-card-footer">
-                                <span class="project-url">lwacademy.co</span>
-                                <span class="project-tagline">Only the design</span>
-                            </div>
-                        </a>
+                            </a>
+                            <a href="https://lwsacademy.co/social-marketing-school/" class="project-card" target="_blank">
+                                <div class="project-card-header">
+                                    <p class="project-name">Social Marketing School</p>
+                                    <div class="project-tools">
+                                        <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/adobeaftereffects.svg"
+                                            class="project-tool-icon" alt="After Effects">
+                                        <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/figma.svg"
+                                            class="project-tool-icon" alt="Figma">
+                                    </div>
+                                </div>
+                                <p class="project-desc">Online platform for digital marketing education and courses.</p>
+                                <div class="project-card-footer">
+                                    <span class="project-url">lwacademy.co</span>
+                                </div>
+                            </a>
+                            <a href="https://lwsacademy.co/ai-platform-masterclass/" class="project-card" target="_blank">
+                                <div class="project-card-header">
+                                    <p class="project-name">AI Platform MasterClass</p>
+                                    <div class="project-tools">
+                                        <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/adobeaftereffects.svg"
+                                            class="project-tool-icon" alt="After Effects">
+                                        <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/figma.svg"
+                                            class="project-tool-icon" alt="Figma">
+                                    </div>
+                                </div>
+                                <p class="project-desc">AI-powered learning platform for professionals.</p>
+                                <div class="project-card-footer">
+                                    <span class="project-url">lwacademy.co</span>
+                                </div>
+                            </a>
+                        </div>
+                        <button class="project-nav project-nav--next" type="button" aria-label="Next project">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <polyline points="9 18 15 12 9 6" />
+                            </svg>
+                        </button>
+                        <div class="project-dots" aria-label="Choose a project"></div>
                     </div>
                 </div>
 
@@ -384,7 +411,12 @@
                             </svg>
                         </a>
                     </div>
-
+                    <div class="cert-item"
+                        onclick="openCertModal('Foundation of UI Experience', 'UI Certificate.png', 'March 12 2026', 'Coursera')"
+                        style="cursor: pointer;">
+                        <p class="cert-name">Foundation of UI Experience</p>
+                        <p class="cert-issuer">Coursera</p>
+                    </div>
                     <div class="cert-item"
                         onclick="openCertModal('AI Fundamentals', 'Michael Certificate.png', 'March 12 2026', 'Coursera Google')"
                         style="cursor: pointer;">
@@ -405,7 +437,7 @@
                         <h2 class="section-title">Branding</h2>
                     </div>
                     <div class="branding-logo-box"
-                        style="display: flex; align-items: center; justify-content: center; padding: 40px 30px; margin-top: 35px;">
+                        style="display: flex; align-items: center; justify-content: center; padding: 40px 30px; margin-top: -20px;">
                         <img src="Nero Logo.svg" alt="Nero Logo"
                             style="width: 150px; height: auto; opacity: 0.9; filter: invert(1) drop-shadow(0 0 10px rgba(0,0,0,0.05));">
                     </div>
