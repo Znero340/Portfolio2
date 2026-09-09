@@ -22,7 +22,105 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 120 + (i + index) * 140);
         });
     });
+
+    initializeProjectsCarousel();
 });
+
+function initializeProjectsCarousel() {
+    const carousel = document.querySelector('.projects-carousel');
+    const projectGrid = carousel?.querySelector('.projects-grid');
+    const cards = projectGrid ? [...projectGrid.querySelectorAll('.project-card')] : [];
+    const dotsContainer = carousel?.querySelector('.project-dots');
+    const previousButton = carousel?.querySelector('.project-nav--previous');
+    const nextButton = carousel?.querySelector('.project-nav--next');
+
+    if (!carousel || !projectGrid || !dotsContainer || cards.length === 0) return;
+
+    const getCardScrollLeft = (card) => {
+        const paddingLeft = parseFloat(getComputedStyle(projectGrid).paddingLeft) || 0;
+        return Math.max(0, card.offsetLeft - projectGrid.offsetLeft - paddingLeft);
+    };
+
+    const getCurrentIndex = () => cards.reduce((closestIndex, card, index) => {
+        const closestDistance = Math.abs(getCardScrollLeft(cards[closestIndex]) - projectGrid.scrollLeft);
+        const cardDistance = Math.abs(getCardScrollLeft(card) - projectGrid.scrollLeft);
+        return cardDistance < closestDistance ? index : closestIndex;
+    }, 0);
+
+    const scrollToCard = (index) => {
+        projectGrid.scrollTo({
+            left: getCardScrollLeft(cards[index]),
+            behavior: 'smooth'
+        });
+    };
+
+    const dots = cards.map((card, index) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'project-dot';
+        dot.setAttribute('aria-label', `Show project ${index + 1}`);
+        dot.addEventListener('click', () => scrollToCard(index));
+        dotsContainer.appendChild(dot);
+        return dot;
+    });
+
+    const updateControls = () => {
+        const currentIndex = getCurrentIndex();
+
+        dots.forEach((dot, index) => dot.setAttribute('aria-current', String(index === currentIndex)));
+    };
+
+    const moveByCard = (direction) => {
+        const currentIndex = getCurrentIndex();
+        const targetIndex = (currentIndex + direction + cards.length) % cards.length;
+        scrollToCard(targetIndex);
+    };
+
+    previousButton?.addEventListener('click', () => moveByCard(-1));
+    nextButton?.addEventListener('click', () => moveByCard(1));
+    projectGrid.addEventListener('scroll', updateControls, { passive: true });
+    window.addEventListener('resize', updateControls);
+
+    let pointerStartX = 0;
+    let pointerStartScrollLeft = 0;
+    let isDragging = false;
+    let didDrag = false;
+
+    projectGrid.addEventListener('pointerdown', (event) => {
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+        pointerStartX = event.clientX;
+        pointerStartScrollLeft = projectGrid.scrollLeft;
+        isDragging = true;
+        didDrag = false;
+        projectGrid.classList.add('is-dragging');
+        projectGrid.setPointerCapture(event.pointerId);
+    });
+
+    projectGrid.addEventListener('pointermove', (event) => {
+        if (!isDragging) return;
+        if (Math.abs(event.clientX - pointerStartX) > 6) didDrag = true;
+        projectGrid.scrollLeft = pointerStartScrollLeft - (event.clientX - pointerStartX);
+    });
+
+    const stopDragging = (event) => {
+        if (!isDragging) return;
+        isDragging = false;
+        projectGrid.classList.remove('is-dragging');
+        if (projectGrid.hasPointerCapture(event.pointerId)) {
+            projectGrid.releasePointerCapture(event.pointerId);
+        }
+    };
+
+    projectGrid.addEventListener('pointerup', stopDragging);
+    projectGrid.addEventListener('pointercancel', stopDragging);
+    projectGrid.addEventListener('click', (event) => {
+        if (!didDrag) return;
+        event.preventDefault();
+        event.stopPropagation();
+        didDrag = false;
+    }, true);
+    updateControls();
+}
 
 /* ── Theme Toggle ─────────────────────── */
 const root = document.documentElement;
@@ -164,7 +262,7 @@ function startTransition() {
 
     // 2. Show the container (currently transparent)
     container.style.display = 'flex';
-    
+
     // 3. Delay the white fade-in so we can see the wrapper zooming
     setTimeout(() => {
         whiteOut.classList.add('active');
@@ -178,7 +276,7 @@ function startTransition() {
             console.error("Video play failed:", err);
             window.location.href = 'creative.html';
         });
-        
+
         // Hide only the white overlay once video starts
         setTimeout(() => {
             whiteOut.style.display = 'none';
