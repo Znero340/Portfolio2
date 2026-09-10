@@ -988,7 +988,21 @@
                         'Design 2/About Us.png', 'Design 2/Track Order.png', 'Design 2/Cart.png',
                         'Design 2/Help Center.png', 'Design 2/Account.png'
                     ]
-                }
+                },
+                {
+                    type: 'carousel',
+                    cover: 'Achievo.png',
+                    images: ['Achievo.png', 'Achievo 2.png ', 'Achievo Med.png'],
+                    previewLabel: 'No Preview',
+                },
+                {
+                    type: 'carousel',
+                    cover: 'PPL Revamp Preview.png',
+                    images: ['PPL Revamp Preview.png', 'PPL Revamp Preview2.png', 'PPL MED.png'],
+                    previewFrames: [
+                        'PPL Revamp.png'
+                    ]
+                },
             ],
             'Graphic Designs': [
                 { type: 'img', src: 'Gyoza.png' },
@@ -1002,7 +1016,9 @@
                 { type: 'img', src: 'Ramen Trivia.png' },
                 { type: 'img', src: 'Enjoy Ramen.png' },
                 { type: 'img', src: 'Ramen Made Easy.png' },
-                { type: 'img', src: 'Paging RamenKit.png' }
+                { type: 'img', src: 'Paging RamenKit.png' },
+                { type: 'img', src: 'Cebu Open.png' },
+                { type: 'img', src: 'Leclerc.png' }
 
             ],
             'Animations': [
@@ -1139,7 +1155,8 @@
 
                 const previewBtn = document.createElement('button');
                 previewBtn.className = 'carousel-preview-btn';
-                previewBtn.innerHTML = 'Preview';
+                previewBtn.innerHTML = media.previewLabel || 'Preview';
+                previewBtn.disabled = media.previewLabel === 'No Preview';
                 previewBtn.onclick = (e) => {
                     e.stopPropagation();
                     openLivePreview(media.previewFrames || []);
